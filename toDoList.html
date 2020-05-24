@@ -1,1 +1,51 @@
 
+<!doctype html>
+<html lang="ru">
+<head>
+
+</head>
+<body>
+	<style>
+	.del{width: 13px; height: 13px; background: red; cursor: pointer; display: inline-block;}
+	li.active{text-decoration:line-through;}
+	</style>
+	<div id="app">
+		<input v-model="text" type="text" placeholder="Запланированная задача">
+		<button v-on:click="addListItem">Добавить</button>
+		<ol v-if="todosLength > 0">
+			<li v-for="(todo, index) in todos" v-bind:class="{ active: todo.active }">
+				{{ todo.text }}
+				<input v-on:change="makeDone(index)" type="checkbox">
+				<span v-on:click="del(index)" class="del"></span>
+			</li>
+		</ol>
+	</div>
+	<script>
+	var app = new Vue({
+		el: '#app',
+		data: {
+			todos: [],
+			todosLength : 0,
+			text: ""
+		},
+		methods: {
+			addListItem: function () {
+				if(this.text.length > 0){
+					this.todos.push({text:this.text, active:false});
+					this.text = "";
+					this.todosLength = this.todos.length;
+				}
+			},
+			makeDone: function (index) {
+				if(this.todos[index].active == true){
+					this.todos[index].active = false;
+				}else{
+					this.todos[index].active = true;
+				}
+			},
+			del: function(index) {
+				this.todos.splice(index, 1);
+			}
+		}		
+	});
+	</script>
